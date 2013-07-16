@@ -6,6 +6,8 @@ import (
 	"errors"
 )
 
+const CRLF = "\r\n"
+
 type Message struct {
 	From *mail.Address
 	To []*mail.Address
@@ -66,4 +68,3 @@ func (message *Message) Plain() []byte {
 func (message *Message) HTML() []byte {
 	return []byte(message.HTMLString())
 }
-
