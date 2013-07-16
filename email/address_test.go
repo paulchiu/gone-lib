@@ -5,11 +5,12 @@ import (
 	"testing"
 )
 
-var sampleAddressList = "hello@example.com, world@example.com"
+var sampleAddressList = "hello@example.com, Earth <world@example.com>"
 
-func TestAddressConvertToString(t *testing.T) {
+func TestAddressConvertToStrings(t *testing.T) {
 	addresses, _ := mail.ParseAddressList(sampleAddressList)
-	strAddresses := addressListToStrings(addresses)
+	addressList := &AddressList{addresses}
+	strAddresses := addressList.ToStrings()
 
 	if len(strAddresses) != 2 {
 		t.Error("Unexpected post-conversion length")
@@ -26,7 +27,8 @@ func TestAddressConvertToString(t *testing.T) {
 
 func TestAddressConvertToRFC(t *testing.T) {
 	addresses, _ := mail.ParseAddressList(sampleAddressList)
-	strAddresses := addressListToRFCStrings(addresses)
+	addressList := &AddressList{addresses}
+	strAddresses := addressList.ToRFCStrings()
 
 	if len(strAddresses) != 2 {
 		t.Error("Unexpected post-conversion length")
@@ -36,7 +38,7 @@ func TestAddressConvertToRFC(t *testing.T) {
 		t.Error("First address does not match")
 	}
 
-	if strAddresses[1] != "<world@example.com>" {
+	if strAddresses[1] != "\"Earth\" <world@example.com>" {
 		t.Error("Second address does not match")
 	}
 }

@@ -14,8 +14,8 @@ var plainFixture = map[string]string{
 }
 
 var htmlFixture = map[string]string{
-	"from":    "Mr From <from@gmail.com>",
-	"to":      "Ms To <to@gmail.com>",
+	"from":    "Mr From <" + plainFixture["from"] + ">",
+	"to":      "Ms To <" + plainFixture["to"] + ">",
 	"subject": "hello html world",
 	"body":    "<h1>lorem ipsum</h1><p>something something etc.</p><p>regards,</p>",
 }

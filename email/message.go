@@ -6,24 +6,24 @@ import (
 	"strings"
 )
 
-// Message header separator
+// Message header separator.
 const CRLF = "\r\n"
 
-// Email message
+// Email message.
 type Message struct {
 	From    *mail.Address
-	To      []*mail.Address
+	To      *AddressList
 	Subject string
 	Body    string
 }
 
-// Create a new email message
+// Create a new email message, assuming no errors.
 func NewMessage(from, to, subject, body string) *Message {
 	message, _ := NewMessageDebug(from, to, subject, body)
 	return message
 }
 
-// Create a new email message, return any reasons for failure
+// Create a new email message, returning any reasons for failure.
 func NewMessageDebug(from, to, subject, body string) (*Message, error) {
 	fromAddress, err := mail.ParseAddress(from)
 	if err != nil {
@@ -35,38 +35,38 @@ func NewMessageDebug(from, to, subject, body string) (*Message, error) {
 		return nil, errors.New("Invalid to address(es); " + err.Error())
 	}
 
-	return &Message{fromAddress, toAddresses, subject, body}, nil
+	return &Message{fromAddress, &AddressList{toAddresses}, subject, body}, nil
 }
 
-// Generate default message header
+// Generate plain text message header.
 func (message *Message) plainHeader() string {
 	header := "From: " + message.From.String() + CRLF
-	header += "To: " + strings.Join(addressListToRFCStrings(message.To), ", ") + CRLF
+	header += "To: " + strings.Join(message.To.ToRFCStrings(), ", ") + CRLF
 	header += "Subject: " + message.Subject + CRLF
 	return header
 }
 
-// Generate html message header
+// Generate html message header.
 func (message *Message) htmlHeader() string {
 	return message.plainHeader() + "Content-Type: text/html" + CRLF
 }
 
-// Convert email message to plain format string
+// Convert email message to plain text message format, return as string.
 func (message *Message) PlainString() string {
 	return message.plainHeader() + CRLF + message.Body
 }
 
-// Convert email message to plain format string
+// Convert email message to html message format, return as string.
 func (message *Message) HTMLString() string {
 	return message.htmlHeader() + CRLF + message.Body
 }
 
-// Convert email message to plain format byte array for sending
+// Convert email message to plain message format byte array; ready for sending.
 func (message *Message) Plain() []byte {
 	return []byte(message.PlainString())
 }
 
-// Convert email message to html format byte array for sending
+// Convert email message to html message format byte array; ready for sending.
 func (message *Message) HTML() []byte {
 	return []byte(message.HTMLString())
 }
