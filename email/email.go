@@ -18,6 +18,7 @@ import (
 	"regexp"
 )
 
+// Email server details
 type Server struct {
 	Username string
 	Password string
