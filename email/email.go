@@ -1,2 +1,2 @@
-// Gone-lib email "one" liners
+// Gone-lib email "one" liners.
 package email
