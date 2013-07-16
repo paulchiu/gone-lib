@@ -13,8 +13,8 @@ const CRLF = "\r\n"
 type Message struct {
 	From    *mail.Address
 	To      []*mail.Address
-	subject string
-	body    string
+	Subject string
+	Body    string
 }
 
 // Create a new email message
@@ -39,26 +39,26 @@ func NewMessageDebug(from, to, subject, body string) (*Message, error) {
 }
 
 // Generate default message header
-func (message *Message) header() string {
+func (message *Message) plainHeader() string {
 	header := "From: " + message.From.String() + CRLF
 	header += "To: " + strings.Join(addressListToRFCStrings(message.To), ", ") + CRLF
-	header += "Subject: " + message.subject + CRLF
+	header += "Subject: " + message.Subject + CRLF
 	return header
 }
 
 // Generate html message header
 func (message *Message) htmlHeader() string {
-	return message.header() + "Content-Type: text/html" + CRLF
+	return message.plainHeader() + "Content-Type: text/html" + CRLF
 }
 
 // Convert email message to plain format string
 func (message *Message) PlainString() string {
-	return message.header() + CRLF + message.body
+	return message.plainHeader() + CRLF + message.Body
 }
 
 // Convert email message to plain format string
 func (message *Message) HTMLString() string {
-	return message.htmlHeader() + CRLF + message.body
+	return message.htmlHeader() + CRLF + message.Body
 }
 
 // Convert email message to plain format byte array for sending
