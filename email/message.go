@@ -61,12 +61,16 @@ func (message *Message) HTMLString() string {
 	return message.htmlHeader() + CRLF + message.Body
 }
 
-// Convert email message to plain message format byte array; ready for sending.
-func (message *Message) Plain() []byte {
-	return []byte(message.PlainString())
-}
+// Convert email message to a given format in byte form, which is needed by stmp.SendMail(). Supports either "plain" or "html".
+func (message *Message) ToBytes(format string) []byte {
+	var byteData []byte
 
-// Convert email message to html message format byte array; ready for sending.
-func (message *Message) HTML() []byte {
-	return []byte(message.HTMLString())
+	switch format {
+	case "plain":
+		byteData = []byte(message.PlainString())
+	case "html":
+		byteData = []byte(message.HTMLString())
+	}
+
+	return byteData
 }
