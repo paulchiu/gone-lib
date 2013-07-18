@@ -70,6 +70,8 @@ func (message *Message) ToBytes(format string) []byte {
 		byteData = []byte(message.PlainString())
 	case "html":
 		byteData = []byte(message.HTMLString())
+	default:
+		panic("Unsupported message format")
 	}
 
 	return byteData
